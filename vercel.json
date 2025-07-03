@@ -1,21 +1,11 @@
 {
   "version": 2,
   "name": "systemweaver",
-  "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/static/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -24,14 +14,13 @@
       ]
     },
     {
-      "source": "/index.html",
+      "source": "/(.*\\.(js|css|html))",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=3600"
         }
       ]
     }
   ]
 }
-
