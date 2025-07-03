@@ -18,7 +18,7 @@ Uma ferramenta visual moderna para design de arquitetura de jogos que gera proje
 - **Classe Global** (laranja): Singletons e autoloads
 
 ### 🔧 Painéis de Propriedades (11 painéis conforme especificação)
-1. **Sinais** - Eventos e comunicação entre objetos
+1. **Sinais** - Eventos e comunicação entre objetos.
 2. **Constantes** - Valores imutáveis da classe
 3. **Enums** - Enumerações e tipos customizados
 4. **Dicionários** - Estruturas de dados chave-valor
