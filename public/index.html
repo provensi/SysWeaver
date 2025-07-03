@@ -89,9 +89,39 @@
 
         <!-- Main Content -->
         <main class="main-content">
+            <!-- Canvas Toolbar -->
+            <div class="canvas-toolbar">
+                <div class="toolbar-left">
+                    <button class="tool-btn" id="zoomIn" title="Zoom In (Ctrl++)">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <button class="tool-btn" id="zoomOut" title="Zoom Out (Ctrl+-)">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <button class="tool-btn" id="resetZoom" title="Reset View (Ctrl+0)">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </button>
+                    <span class="zoom-level">100%</span>
+                </div>
+                <div class="toolbar-center">
+                    <input type="text" class="search-input" placeholder="Buscar elementos...">
+                </div>
+                <div class="toolbar-right">
+                    <button class="tool-btn" id="toggleGrid" title="Toggle Grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="tool-btn" id="autoLayout" title="Auto Layout">
+                        <i class="fas fa-project-diagram"></i>
+                    </button>
+                </div>
+            </div>
+
             <div class="canvas-container">
-                <div class="canvas" id="classCanvas">
-                    <!-- Cards serão inseridos aqui dinamicamente -->
+                <div class="canvas-viewport" id="canvasViewport">
+                    <div class="canvas-grid"></div>
+                    <div class="canvas-content" id="canvasContent">
+                        <!-- Cards serão inseridos aqui dinamicamente -->
+                    </div>
                 </div>
                 
                 <!-- Floating Action Button -->
@@ -142,13 +172,32 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="parentClass">Classe Pai (opcional)</label>
-                            <input type="text" id="parentClass" placeholder="Node2D">
+                            <label for="parentClass">Classe Pai</label>
+                            <select id="parentClass" required>
+                                <option value="Node">Node (padrão)</option>
+                                <option value="Node2D">Node2D</option>
+                                <option value="CharacterBody2D">CharacterBody2D</option>
+                                <option value="RigidBody2D">RigidBody2D</option>
+                                <option value="StaticBody2D">StaticBody2D</option>
+                                <option value="Control">Control</option>
+                                <option value="Resource">Resource</option>
+                                <option value="RefCounted">RefCounted</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
-                            <label for="interfaces">Interfaces (opcional)</label>
-                            <input type="text" id="interfaces" placeholder="IMovable, IDamageable">
+                            <label for="interfaces">Interfaces</label>
+                            <div class="interfaces-container">
+                                <select id="interfaces" multiple size="4">
+                                    <option value="IMovable">IMovable</option>
+                                    <option value="IDamageable">IDamageable</option>
+                                    <option value="IInteractable">IInteractable</option>
+                                    <option value="IAI">IAI</option>
+                                    <option value="ICollectable">ICollectable</option>
+                                    <option value="IUpgradeable">IUpgradeable</option>
+                                </select>
+                                <small>Segure Ctrl para selecionar múltiplas interfaces</small>
+                            </div>
                         </div>
                         
                         <div class="form-actions">
@@ -236,6 +285,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="canvas-engine.js"></script>
     <script src="dsl-parser.js"></script>
     <script src="class-card.js"></script>
     <script src="godot-exporter.js"></script>
