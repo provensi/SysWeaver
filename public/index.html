@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SystemWeaver - Game Architecture Designer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-magic"></i>
+                    <span>SystemWeaver</span>
+                </div>
+                <div class="project-info">
+                    <span class="project-name">Untitled Project</span>
+                    <button class="btn-secondary" id="openProject">
+                        <i class="fas fa-folder-open"></i>
+                        Abrir
+                    </button>
+                    <button class="btn-secondary" id="saveProject">
+                        <i class="fas fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="view-tabs">
+                    <button class="tab-btn active" data-view="classes">
+                        <i class="fas fa-sitemap"></i>
+                        Classes
+                    </button>
+                    <button class="tab-btn" data-view="instances">
+                        <i class="fas fa-cubes"></i>
+                        Instâncias
+                    </button>
+                    <button class="tab-btn" data-view="activities">
+                        <i class="fas fa-play-circle"></i>
+                        Atividades
+                    </button>
+                    <button class="tab-btn" data-view="systems">
+                        <i class="fas fa-network-wired"></i>
+                        Sistemas
+                    </button>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-eye"></i>
+                        Todos
+                    </button>
+                    <button class="filter-btn" data-filter="components">
+                        <i class="fas fa-puzzle-piece"></i>
+                        Componentes
+                    </button>
+                    <button class="filter-btn" data-filter="abstract">
+                        <i class="fas fa-layer-group"></i>
+                        Abstract
+                    </button>
+                    <button class="filter-btn" data-filter="interfaces">
+                        <i class="fas fa-plug"></i>
+                        Interfaces
+                    </button>
+                </div>
+                
+                <button class="btn-primary" id="addClassBtn">
+                    <i class="fas fa-plus"></i>
+                    Nova Classe
+                </button>
+                
+                <button class="btn-secondary" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    Exportar Godot
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="canvas-container">
+                <div class="canvas" id="classCanvas">
+                    <!-- Cards serão inseridos aqui dinamicamente -->
+                </div>
+                
+                <!-- Floating Action Button -->
+                <button class="fab" id="fabBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Propriedades</h3>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content" id="sidebarContent">
+                <p>Selecione uma classe para editar suas propriedades</p>
+            </div>
+        </aside>
+
+        <!-- Modal para criação de classe -->
+        <div class="modal" id="classModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Nova Classe</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="classForm">
+                        <div class="form-group">
+                            <label for="className">Nome da Classe</label>
+                            <input type="text" id="className" placeholder="MinhaClasse" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="classType">Tipo</label>
+                            <select id="classType">
+                                <option value="normal">Classe Normal</option>
+                                <option value="abstract">Classe Abstrata</option>
+                                <option value="interface">Interface</option>
+                                <option value="component">Componente</option>
+                                <option value="global">Classe Global</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="parentClass">Classe Pai (opcional)</label>
+                            <input type="text" id="parentClass" placeholder="Node2D">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interfaces">Interfaces (opcional)</label>
+                            <input type="text" id="interfaces" placeholder="IMovable, IDamageable">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
+                            <button type="submit" class="btn-primary">Criar Classe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <!-- Monaco Editor Container (será carregado dinamicamente) -->
+    <div class="code-editor-modal" id="codeEditorModal">
+        <div class="code-editor-header">
+            <h3 id="editorTitle">Editor de Código</h3>
+            <div class="editor-actions">
+                <button class="btn-secondary" id="editorCancel">Cancelar</button>
+                <button class="btn-primary" id="editorSave">Salvar</button>
+                <button class="editor-close" id="editorClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="code-editor-content" id="codeEditorContent">
+            <!-- Monaco Editor será inserido aqui -->
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="dsl-parser.js"></script>
+    <script src="class-card.js"></script>
+    <script src="godot-exporter.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

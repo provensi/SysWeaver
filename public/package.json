@@ -1,0 +1,26 @@
+{
+  "name": "systemweaver",
+  "version": "1.0.0",
+  "description": "SystemWeaver - Game Architecture Designer",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "build": "echo 'No build needed - static files'",
+    "dev": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "game-development",
+    "godot",
+    "architecture",
+    "visual-design",
+    "class-diagram"
+  ],
+  "author": "SystemWeaver Team",
+  "license": "MIT",
+  "homepage": "https://github.com/provensi/SysWeaver",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/provensi/SysWeaver.git"
+  }
+}
+
