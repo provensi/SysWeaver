@@ -48,6 +48,10 @@
                         <i class="fas fa-network-wired"></i>
                         Sistemas
                     </button>
+                    <button class="tab-btn" data-view="chat">
+                        <i class="fas fa-comments"></i>
+                        Chat
+                    </button>
                 </div>
             </div>
             
@@ -152,6 +156,60 @@
                             <button type="submit" class="btn-primary">Criar Classe</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat View -->
+        <div class="chat-view" id="chatView" style="display: none;">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2><i class="fas fa-comments"></i> Canal de Comunicação</h2>
+                    <p>Escreva suas mensagens e ideias aqui. Histórico salvo automaticamente.</p>
+                </div>
+                
+                <div class="chat-content">
+                    <div class="chat-section">
+                        <label for="userMessage">Sua Mensagem:</label>
+                        <textarea 
+                            id="userMessage" 
+                            placeholder="Digite sua mensagem, ideias, solicitações de mudanças..."
+                            rows="8"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="chat-section">
+                        <label for="devResponse">Resposta do Desenvolvedor:</label>
+                        <textarea 
+                            id="devResponse" 
+                            placeholder="Respostas e atualizações aparecerão aqui..."
+                            rows="8"
+                            readonly
+                        ></textarea>
+                    </div>
+                    
+                    <div class="chat-actions">
+                        <button class="btn-secondary" id="clearChat">
+                            <i class="fas fa-trash"></i>
+                            Limpar Chat
+                        </button>
+                        <button class="btn-secondary" id="exportChat">
+                            <i class="fas fa-download"></i>
+                            Exportar Conversa
+                        </button>
+                        <button class="btn-primary" id="saveChat">
+                            <i class="fas fa-save"></i>
+                            Salvar Mensagem
+                        </button>
+                    </div>
+                    
+                    <div class="chat-info">
+                        <small>
+                            <i class="fas fa-info-circle"></i>
+                            Mensagens são salvas automaticamente no navegador. 
+                            Use "Exportar Conversa" para backup.
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>

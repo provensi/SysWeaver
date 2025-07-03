@@ -19,6 +19,7 @@ class SystemWeaver {
         this.setupEventListeners();
         this.setupMonacoEditor();
         this.setupGodotExporter();
+        this.setupChat();
         this.loadSampleData();
         this.render();
     }
@@ -640,6 +641,21 @@ class SystemWeaver {
             btn.classList.toggle('active', btn.dataset.view === view);
         });
         
+        // Show/hide views
+        const views = ['classes', 'instances', 'activities', 'systems', 'chat'];
+        views.forEach(v => {
+            const element = document.getElementById(v === 'classes' ? 'classCanvas' : `${v}View`);
+            if (element) {
+                element.style.display = v === view ? 'block' : 'none';
+            }
+        });
+        
+        // Special handling for chat view
+        if (view === 'chat') {
+            document.getElementById('chatView').style.display = 'block';
+            this.loadChatData();
+        }
+        
         this.render();
     }
     
@@ -1029,6 +1045,105 @@ class SystemWeaver {
     
     showComingSoon(feature) {
         alert(`${feature} - Em desenvolvimento!`);
+    }
+    
+    // Chat System
+    setupChat() {
+        // Chat event listeners
+        document.getElementById('saveChat').addEventListener('click', () => this.saveChatMessage());
+        document.getElementById('clearChat').addEventListener('click', () => this.clearChat());
+        document.getElementById('exportChat').addEventListener('click', () => this.exportChat());
+        
+        // Load saved chat data
+        this.loadChatData();
+    }
+    
+    saveChatMessage() {
+        const userMessage = document.getElementById('userMessage').value.trim();
+        if (!userMessage) {
+            alert('Digite uma mensagem primeiro!');
+            return;
+        }
+        
+        const timestamp = new Date().toLocaleString('pt-BR');
+        const chatData = this.getChatData();
+        
+        chatData.messages.push({
+            timestamp,
+            user: userMessage,
+            dev: '' // Será preenchido pelo desenvolvedor
+        });
+        
+        this.saveChatData(chatData);
+        this.updateChatDisplay();
+        
+        // Clear user message
+        document.getElementById('userMessage').value = '';
+        
+        alert('Mensagem salva! O desenvolvedor responderá em breve.');
+    }
+    
+    clearChat() {
+        if (confirm('Tem certeza que deseja limpar todo o histórico do chat?')) {
+            localStorage.removeItem('systemweaver_chat');
+            document.getElementById('userMessage').value = '';
+            document.getElementById('devResponse').value = '';
+        }
+    }
+    
+    exportChat() {
+        const chatData = this.getChatData();
+        const content = this.formatChatForExport(chatData);
+        
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `systemweaver-chat-${new Date().toISOString().split('T')[0]}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    getChatData() {
+        const saved = localStorage.getItem('systemweaver_chat');
+        return saved ? JSON.parse(saved) : { messages: [] };
+    }
+    
+    saveChatData(data) {
+        localStorage.setItem('systemweaver_chat', JSON.stringify(data));
+    }
+    
+    loadChatData() {
+        this.updateChatDisplay();
+    }
+    
+    updateChatDisplay() {
+        const chatData = this.getChatData();
+        const userTextarea = document.getElementById('userMessage');
+        const devTextarea = document.getElementById('devResponse');
+        
+        // Show latest messages
+        if (chatData.messages.length > 0) {
+            const latest = chatData.messages[chatData.messages.length - 1];
+            userTextarea.value = latest.user || '';
+            devTextarea.value = latest.dev || 'Aguardando resposta...';
+        }
+    }
+    
+    formatChatForExport(chatData) {
+        let content = '# SystemWeaver - Histórico de Comunicação\n\n';
+        content += `Exportado em: ${new Date().toLocaleString('pt-BR')}\n`;
+        content += `Total de mensagens: ${chatData.messages.length}\n\n`;
+        content += '---\n\n';
+        
+        chatData.messages.forEach((msg, index) => {
+            content += `## Conversa ${index + 1} - ${msg.timestamp}\n\n`;
+            content += `**Usuário:**\n${msg.user}\n\n`;
+            content += `**Desenvolvedor:**\n${msg.dev || 'Sem resposta'}\n\n`;
+            content += '---\n\n';
+        });
+        
+        return content;
     }
 }
 
